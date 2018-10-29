@@ -3,7 +3,7 @@ I am working on a project for the Twitter API usage, which integrates the CURL f
 
 ## Usage:
 ### Include on page:
-To be able to use it, you should download the `TwitterClass.php` folder and include it to your page as shown below.
+To be able to use it, you should download the `TwitterClass.php` file and include it to your page as shown below.
 ```php
 <?php
   session_start();
