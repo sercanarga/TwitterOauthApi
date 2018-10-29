@@ -1,5 +1,4 @@
 <?php
-
 class Twitter
 {
 	public $api_url = 'https://api.twitter.com/1.1/';
