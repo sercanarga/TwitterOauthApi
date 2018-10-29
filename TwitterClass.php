@@ -11,8 +11,7 @@ class Twitter
 	
     public $request_token = 'https://twitter.com/oauth/request_token';
 
-    function __construct($_consumer_key, $_consumer_key_secret , $_oauth_token = null, $_oauth_token_secret = null)
-    {
+    function __construct($_consumer_key, $_consumer_key_secret , $_oauth_token = null, $_oauth_token_secret = null) {
         $this->consumer_key = $_consumer_key;
         $this->consumer_key_secret = $_consumer_key_secret;
 		if (!empty($_oauth_token)) {
@@ -21,16 +20,15 @@ class Twitter
 		}
     }
 
-    function getRequestToken($parameters = [], $url = '')
-    {
+    function getRequestToken($parameters = [], $url = '') {
 		if (!empty($url)) $this->request_token = $url;
-        $params = array(
-            'oauth_version' => '1.0',
-            'oauth_nonce' => time(),
-            'oauth_timestamp' => time(),
-            'oauth_consumer_key' => $this->consumer_key,
-            'oauth_signature_method' => 'HMAC-SHA1'
-        );
+		$params = array(
+		    'oauth_version' => '1.0',
+		    'oauth_nonce' => time(),
+		    'oauth_timestamp' => time(),
+		    'oauth_consumer_key' => $this->consumer_key,
+		    'oauth_signature_method' => 'HMAC-SHA1'
+		);
 		$params = array_merge($params, $parameters);
 		$keys = $this->url_encode(array_keys($params));
 		$values = $this->url_encode(array_values($params));
