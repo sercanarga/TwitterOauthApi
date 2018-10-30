@@ -22,9 +22,13 @@ In the friendships/create field you will need to type in the names for the API J
 
 In the array field you need to type in the parameters that you want.
 The example shown below will make you follow the Twitter user named [sercanarga](https://twitter.com/sercanarga).
+
+true = Debug Mode On
+false = Debug Mode Off
+
 ```php
 $twitter = new Twitter('CONSUMER_KEY', 'CONSUMER_KEY_SECRET');
-$status = $twitter->post('friendships/create', ['screen_name' => 'sercanarga']);
+$status = $twitter->post('friendships/create', ['screen_name' => 'sercanarga'], true);
 if ($status == 1) {
     echo 'Success!';
 } else {
