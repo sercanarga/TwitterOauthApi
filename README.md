@@ -24,11 +24,11 @@ In the array field you need to type in the parameters that you want.
 The example shown below will make you follow the Twitter user named [sercanarga](https://twitter.com/sercanarga).
 ```php
 $twitter = new Twitter('CONSUMER_KEY', 'CONSUMER_KEY_SECRET');
-$status = $twitter->post('friendships/create', array('screen_name', 'sercanarga'));
+$status = $twitter->post('friendships/create', ['screen_name' => 'sercanarga']);
 if ($status == 1) {
-  echo 'Success!';
+    echo 'Success!';
 } else {
-  echo 'Error!';
+    echo 'Error!';
 }
 ```
 ## Features to include:
