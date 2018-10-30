@@ -9,7 +9,6 @@ class Twitter
 	public $oauth_token;
 	public $oauth_token_secret;
 	public $status_code = null;
-
 	function __construct($_consumer_key, $_consumer_key_secret , $_oauth_token = null, $_oauth_token_secret = null) {
 		$this->consumer_key = $_consumer_key;
 		$this->consumer_key_secret = $_consumer_key_secret;
@@ -77,8 +76,21 @@ class Twitter
 			return '';
 		}
 	}
+
+	function write_console($mode, $error) {
+		if ($mode == 'debug') {
+			echo '<script>console.log("%c <--API DEBUG-->", "color:red;font-size:1em;font-weight:bold;font-family:monospace");</script>';
+			echo "<script>console.log(".json_encode($error).");</script>";
+			echo '<script>console.log("%c <--END DEBUG-->", "color:red;font-size:1em;font-weight:bold;font-family:monospace");</script>';
+		} else {
+			echo '<h4 style="color:red;font-family:monospace;">API ERROR! VIEW IN DEVELOPER CONSOLE.</h4>';
+			echo '<script>console.log("%c <--API ERROR-->", "color:red;font-size:1em;font-weight:bold;font-family:monospace");</script>';
+			echo "<script>console.log(".json_encode($error).");</script>";
+			echo '<script>console.log("%c <--END ERROR-->", "color:red;font-size:1em;font-weight:bold;font-family:monospace");</script>';
+		}
+	}
 	
-	public function post($method, $status) {
+	public function post($method, $status, $debug) {
 		if (isset($_SESSION['oauth_token'])) {
 			unset($_SESSION['oauth_token']);
 			$method_url = "$this->oauth_url/access_token";
@@ -108,7 +120,6 @@ class Twitter
 						'&oauth_token='.$_oauth['oauth_token'].
 						'&oauth_version='.$twitter_version.
 						$this->status_code;
-
 		$base_string = 'POST&'.rawurlencode($url).'&'.rawurlencode($param_string);
 		$sign_key = rawurlencode($this->consumer_key_secret).'&'.rawurlencode($_oauth['oauth_token_secret']);
 		$signature 	= base64_encode(hash_hmac('sha1', $base_string, $sign_key, true));
@@ -128,12 +139,12 @@ class Twitter
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->status_code);
 		$twitter_post = json_decode(curl_exec($ch));
 		$info = curl_getinfo($ch);
-		$returncode = $info['http_code'];
 		curl_close($ch);
-		if($returncode == 200) {
+		if($info['http_code'] == 200) {
+			if ($debug == true) $this->write_console('debug', $twitter_post);
 			return true;
 		} else {
-			return false;
+			$this->write_console('error', $twitter_post);
 		}
 	}
 }
