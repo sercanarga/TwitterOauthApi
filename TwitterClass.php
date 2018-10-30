@@ -3,30 +3,30 @@ class Twitter
 {
 	public $api_url = 'https://api.twitter.com/1.1/';
 	public $oauth_url = 'https://api.twitter.com/oauth';
-    public $request_token = 'https://twitter.com/oauth/request_token';
+	public $request_token = 'https://twitter.com/oauth/request_token';
 	public $consumer_key;
 	public $consumer_key_secret;
 	public $oauth_token;
 	public $oauth_token_secret;
 	public $status_code = null;
 
-    function __construct($_consumer_key, $_consumer_key_secret , $_oauth_token = null, $_oauth_token_secret = null) {
-        $this->consumer_key = $_consumer_key;
-        $this->consumer_key_secret = $_consumer_key_secret;
+	function __construct($_consumer_key, $_consumer_key_secret , $_oauth_token = null, $_oauth_token_secret = null) {
+		$this->consumer_key = $_consumer_key;
+		$this->consumer_key_secret = $_consumer_key_secret;
 		if (!empty($_oauth_token)) {
 			$this->oauth_token = $_oauth_token;
 			$this->oauth_token_secret = $_oauth_token_secret;
 		}
-    }
+	}
 
-    function getRequestToken($parameters = [], $url = '') {
+	function getRequestToken($parameters = [], $url = '') {
 		if (!empty($url)) $this->request_token = $url;
 		$params = array(
-		    'oauth_version' => '1.0',
-		    'oauth_nonce' => time(),
-		    'oauth_timestamp' => time(),
-		    'oauth_consumer_key' => $this->consumer_key,
-		    'oauth_signature_method' => 'HMAC-SHA1'
+			'oauth_version' => '1.0',
+			'oauth_nonce' => time(),
+			'oauth_timestamp' => time(),
+			'oauth_consumer_key' => $this->consumer_key,
+			'oauth_signature_method' => 'HMAC-SHA1'
 		);
 		$params = array_merge($params, $parameters);
 		$keys = $this->url_encode(array_keys($params));
@@ -49,27 +49,27 @@ class Twitter
 		return $this->http($url);
     }
 
-    function http($url, $post_data = null) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        if (isset($post_data)) {
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-        }
-        $response = curl_exec($ch);
-        $this->http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $this->last_api_call = $url;
-        curl_close($ch);
+	function http($url, $post_data = null) {
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+		if (isset($post_data)) {
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+		}
+		$response = curl_exec($ch);
+		$this->http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$this->last_api_call = $url;
+		curl_close($ch);
 		parse_str($response, $array_response);
-        return $array_response;
+		return $array_response;
     }
 
-    function url_encode($input) {
-        if (is_array($input)) {
+	function url_encode($input) {
+		if (is_array($input)) {
 			return array_map(array('Twitter', 'url_encode'), $input);
 		} else if (is_scalar($input)) {
 			return str_replace('+',' ',str_replace('%7E', '~', rawurlencode($input)));
@@ -96,7 +96,7 @@ class Twitter
 			die();
 		}
 		foreach($status as $status_key => $status_value) {
-            $this->status_code .= '&'.$status_key.'='.$status_value;
+			$this->status_code .= '&'.$status_key.'='.$status_value;
 		}
 		$twitter_version = '1.0';
 		$sign_method = 'HMAC-SHA1';
